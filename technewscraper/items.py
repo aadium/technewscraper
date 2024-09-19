@@ -10,7 +10,7 @@ class ArticleItem(Item):
     title = Field()
     category = Field()
     url = Field()
-    published_date = Field()
+    published_datetime = Field()
     author = Field()
     content = Field()
     

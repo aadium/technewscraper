@@ -17,7 +17,7 @@ class TechCrunchScraper(CrawlSpider):
         article_item["title"] = response.css(".wp-block-post-title::text").get().strip()
         article_item["category"] = response.css(".is-taxonomy-category::text").get().strip()
         article_item["author"] = response.css(".wp-block-tc23-author-card-name a::text").get().strip()
-        article_item["published_date"] = response.css(".wp-block-post-date time::attr(datetime)").get()
+        article_item["published_datetime"] = response.css(".wp-block-post-date time::attr(datetime)").get()
         article_item["content"] = response.css(".wp-block-post-content").get().strip()
 
         return article_item
