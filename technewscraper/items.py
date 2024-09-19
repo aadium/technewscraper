@@ -6,10 +6,11 @@
 from scrapy import Item, Field
 
 
-class TechnewscraperItem(Item):
+class ArticleItem(Item):
     title = Field()
-    price = Field()
-    upc = Field()
-    image_url = Field()
+    category = Field()
     url = Field()
+    published_date = Field()
+    author = Field()
+    content = Field()
     
