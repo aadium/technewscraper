@@ -29,7 +29,7 @@ class VentureBeatScraper(CrawlSpider):
         article_item["categories"] = categories
         article_item["author"] = response.css(".Article__author-info a::text").get().strip()
         article_item["published_datetime"] = response.css(".article-time-container time::attr(datetime)").get()
-        article_item["summary"] = response.css(".article-content p:first-child").get()
+        article_item["summary"] = response.css(".article-content p").get()
 
         return article_item
     
