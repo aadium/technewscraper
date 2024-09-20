@@ -16,11 +16,13 @@ class TechCrunchScraper(CrawlSpider):
         article_item["url"] = response.url
         article_item["publisher"] = "TechCrunch"
         article_item["title"] = response.css(".wp-block-post-title::text").get().strip()
-        article_item["category"] = response.css(".is-taxonomy-category::text").get().strip()
+        category = response.css(".is-taxonomy-category::text").get().strip()
+        categories = []
+        categories.append(category)
+        article_item["categories"] = categories
         article_item["author"] = response.css(".wp-block-tc23-author-card-name a::text").get().strip()
         article_item["published_datetime"] = response.css(".wp-block-post-date time::attr(datetime)").get()
-        article_item["summary"] = response.css("#speakable-summary::text").get().strip() if response.css("#speakable-summary::text").get() else None
-        article_item["summary"] = response.css("article-content p:first-of-type::text").get().strip() if response.css("article-content p:first-of-type::text").get() else None
+        article_item["summary"] = response.css("#speakable-summary").get()
 
         return article_item
     

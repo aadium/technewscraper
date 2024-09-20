@@ -19,17 +19,17 @@ class VentureBeatScraper(CrawlSpider):
         article_item["publisher"] = "VentureBeat"
         article_item["title"] = response.css(".Article__header-top h1::text").get().strip()
         category_match = re.search(r'https://venturebeat\.com/([^/]+)/', response.url)
+        categories = []
         if category_match:
             category = category_match.group(1)
             if category == 'ai':
-                article_item["category"] = 'AI'
+                categories.append('AI')
             else:
-                article_item["category"] = category.replace('-', ' ').title()
-        else:
-            article_item["category"] = None
+                categories.append(category.replace('-', ' ').title())
+        article_item["categories"] = categories
         article_item["author"] = response.css(".Article__author-info a::text").get().strip()
         article_item["published_datetime"] = response.css(".article-time-container time::attr(datetime)").get()
-        article_item["summary"] = response.css("article-content p:first-child").get().strip() if response.css("article-content p:first-child").get() else None
+        article_item["summary"] = response.css(".article-content p:first-child").get()
 
         return article_item
     

@@ -9,7 +9,7 @@ from scrapy import Item, Field
 class ArticleItem(Item):
     publisher = Field()
     title = Field()
-    category = Field()
+    categories = Field()
     url = Field()
     published_datetime = Field()
     author = Field()
