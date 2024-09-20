@@ -7,10 +7,11 @@ from scrapy import Item, Field
 
 
 class ArticleItem(Item):
+    publisher = Field()
     title = Field()
     category = Field()
     url = Field()
     published_datetime = Field()
     author = Field()
-    content = Field()
+    summary = Field()
     
