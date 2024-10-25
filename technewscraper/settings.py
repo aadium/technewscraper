@@ -12,7 +12,6 @@ BOT_NAME = "technewscraper"
 SPIDER_MODULES = ["technewscraper.spiders"]
 NEWSPIDER_MODULE = "technewscraper.spiders"
 FEED_FORMAT = "json"
-FEED_URI = "output.json"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

@@ -8,7 +8,7 @@ class TheVergeScraper(CrawlSpider):
     start_urls = ["https://www.theverge.com/"]
 
     rules = (
-        Rule(LinkExtractor(allow=[r'https://www.theverge.com/\d{4}/']), 
+        Rule(LinkExtractor(allow=[r'https://www.theverge.com/202[3-9]/']), 
              callback="parse_article", follow=True),
     )
 
@@ -22,7 +22,7 @@ class TheVergeScraper(CrawlSpider):
         article_item["categories"] = [category.strip() for category in categories if category.strip()]
         article_item["author"] = response.css("span.font-medium a::text").get().strip()
         article_item["published_datetime"] = response.css(".duet--article--timestamp::attr(datetime)").get()
-        article_item["summary"] = response.css(".duet--article--article-body-component p").get()
+        article_item["summary"] = response.xpath("normalize-space(//div[contains(@class, 'duet--article--article-body-component')]//p)").get()
 
         return article_item
     

@@ -7,7 +7,7 @@ class TechCrunchScraper(CrawlSpider):
     start_urls = ["https://techcrunch.com/"]
 
     rules = (
-        Rule(LinkExtractor(allow=[r'https://techcrunch.com/\d{4}/\d{2}/\d{2}/'], deny=[r'/page/']), callback="parse_article", follow=True),
+        Rule(LinkExtractor(allow=[r'https://techcrunch.com/202[3-9]/\d{2}/\d{2}/'], deny=[r'/page/']), callback="parse_article", follow=True),
     )
 
     def parse_article(self, response):
@@ -22,7 +22,7 @@ class TechCrunchScraper(CrawlSpider):
         article_item["categories"] = categories
         article_item["author"] = response.css(".wp-block-tc23-author-card-name a::text").get().strip()
         article_item["published_datetime"] = response.css(".wp-block-post-date time::attr(datetime)").get()
-        article_item["summary"] = response.css("#speakable-summary").get()
+        article_item["summary"] = response.xpath("normalize-space(//p[@id='speakable-summary'])").get()
 
         return article_item
     

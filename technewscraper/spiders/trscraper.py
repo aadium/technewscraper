@@ -1,6 +1,7 @@
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from technewscraper.items import ArticleItem
+from datetime import datetime
 
 class TechRadarScraper(CrawlSpider):
     name = "trscraper"
@@ -20,8 +21,14 @@ class TechRadarScraper(CrawlSpider):
         categories = response.css("nav.breadcrumb a::text").getall()
         article_item["categories"] = [category.strip() for category in categories if category.strip()]
         article_item["author"] = response.css(".author-byline__link::text").get().strip()
-        article_item["published_datetime"] = response.css(".relative-date::attr(datetime)").get()
-        article_item["summary"] = response.css(".bodyCopy p").get()
+        published_datetime = response.css(".relative-date::attr(datetime)").get()
+
+        if published_datetime:
+            published_date = datetime.fromisoformat(published_datetime.replace('Z', '+00:00'))
+            if published_date.year < 2023:
+                return
+
+        article_item["published_datetime"] = published_datetime
+        article_item["summary"] = response.xpath("normalize-space(//div[contains(@class, 'bodyCopy')]//p)").get()
 
         return article_item
-    

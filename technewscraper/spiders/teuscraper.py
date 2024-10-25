@@ -10,7 +10,7 @@ class TechEuScraper(CrawlSpider):
     start_urls = ["https://tech.eu/"]
 
     rules = (
-        Rule(LinkExtractor(allow=[r'https://tech.eu/\d{4}/\d{2}/\d{2}/']), callback="parse_article", follow=True),
+        Rule(LinkExtractor(allow=[r'https://tech.eu/202[3-9]/\d{2}/\d{2}/']), callback="parse_article", follow=True),
     )
     
 
@@ -37,7 +37,7 @@ class TechEuScraper(CrawlSpider):
         article_item["author"] = response.css(".single-post-meta-text strong::text").get().strip()
         inpDateTime = response.css(".sp-date::text").get()
         article_item["published_datetime"] = convert_date(inpDateTime)
-        article_item["summary"] = response.css(".single-post-content p").get()
+        article_item["summary"] = response.xpath("normalize-space(//div[@class='single-post-content']//p)").get()
 
         return article_item
     
