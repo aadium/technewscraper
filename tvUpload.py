@@ -24,9 +24,9 @@ collection = db[collection_name]
 # Prepare bulk write operations 
 operations = []
 for item in data:
-    # Assuming each item has a unique 'url' field
+    # Assuming each item has unique 'url' and 'title' fields
     operations.append(
-        UpdateOne({'url': item['url']}, {'$set': item}, upsert=True)
+        UpdateOne({'url': item['url'], 'title': item['title']}, {'$set': item}, upsert=True)
     )
 
 # Execute bulk write
