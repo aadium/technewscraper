@@ -1,10 +1,14 @@
 const express = require('express');
+const cors = require('cors');
+
 const { MongoClient } = require('mongodb');
 const dotenv = require('dotenv');
 
 dotenv.config();
 const app = express();
-const port = 3001;
+app.use(cors());
+
+const port = 3002;
 
 const uri = process.env.MONGODB_URI;
 
