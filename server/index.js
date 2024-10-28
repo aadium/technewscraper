@@ -36,7 +36,7 @@ client.connect()
         app.get('/techeu', async (req, res) => {
             try {
                 const limit = parseInt(req.query.limit) || 10;
-                const documents = await teuCollection.find().limit(limit).toArray();
+                const documents = await teuCollection.find().limit(limit).sort({ published_datetime: -1 }).toArray();
                 res.json(documents);
             } catch (error) {
                 res.status(500).send('Error fetching documents: ' + error.message);
@@ -46,7 +46,7 @@ client.connect()
         app.get('/theverge', async (req, res) => {
             try {
                 const limit = parseInt(req.query.limit) || 10;
-                const documents = await thevergeCollection.find().limit(limit).toArray();
+                const documents = await thevergeCollection.find().limit(limit).sort({ published_datetime: -1 }).toArray();
                 res.json(documents);
             } catch (error) {
                 res.status(500).send('Error fetching documents: ' + error.message);
