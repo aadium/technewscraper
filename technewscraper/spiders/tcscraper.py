@@ -1,13 +1,25 @@
+from technewscraper.items import ArticleItem
+from datetime import datetime, timedelta
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-from technewscraper.items import ArticleItem
 
 class TechCrunchScraper(CrawlSpider):
     name = "tcscraper"
     start_urls = ["https://techcrunch.com/"]
 
+    today = datetime.now()
+    allow_patterns = []
+
+    # Generate allow patterns for the last three days
+    for i in range(1):
+        previous_date = today - timedelta(days=i)
+        year = previous_date.year
+        month = previous_date.month
+        day = previous_date.day
+        allow_patterns.append(rf'https://techcrunch.com/{year}/{month:02d}/{day:02d}/')
+
     rules = (
-        Rule(LinkExtractor(allow=[r'https://techcrunch.com/202[3-9]/\d{2}/\d{2}/'], deny=[r'/page/']), callback="parse_article", follow=True),
+        Rule(LinkExtractor(allow=allow_patterns, deny=[r'/page/']), callback="parse_article", follow=True),
     )
 
     def parse_article(self, response):
@@ -25,4 +37,3 @@ class TechCrunchScraper(CrawlSpider):
         article_item["summary"] = response.xpath("normalize-space(//p[@id='speakable-summary'])").get()
 
         return article_item
-    

@@ -2,14 +2,25 @@ import re
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from technewscraper.items import ArticleItem
+from datetime import datetime, timedelta
 
 class TheVergeScraper(CrawlSpider):
     name = "tvscraper"
     start_urls = ["https://www.theverge.com/"]
 
+    today = datetime.now()
+    allow_patterns = []
+
+    # Generate allow patterns for the last three days
+    for i in range(1):
+        previous_date = today - timedelta(days=i)
+        year = previous_date.year
+        month = previous_date.month
+        day = previous_date.day
+        allow_patterns.append(rf'https://www.theverge.com/{year}/{month:02d}/{day:02d}/')
+
     rules = (
-        Rule(LinkExtractor(allow=[r'https://www.theverge.com/202[3-9]/']), 
-             callback="parse_article", follow=True),
+        Rule(LinkExtractor(allow=allow_patterns), callback="parse_article", follow=True),
     )
 
     def parse_article(self, response):
@@ -25,4 +36,3 @@ class TheVergeScraper(CrawlSpider):
         article_item["summary"] = response.xpath("normalize-space(//div[contains(@class, 'duet--article--article-body-component')]//p)").get()
 
         return article_item
-    

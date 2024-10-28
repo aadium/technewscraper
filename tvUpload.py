@@ -8,7 +8,7 @@ dotenv.load_dotenv()
 
 # Configuration
 json_file_path = 'tv.json'
-mongo_uri = os.getenv('MONGO_URI')
+mongo_uri = os.getenv('MONGODB_URI')
 database_name = 'tech-news-db'
 collection_name = 'theverge'
 

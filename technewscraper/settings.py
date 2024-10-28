@@ -11,12 +11,7 @@ BOT_NAME = "technewscraper"
 
 SPIDER_MODULES = ["technewscraper.spiders"]
 NEWSPIDER_MODULE = "technewscraper.spiders"
-FEEDS = {
-    "quotes_splash.json": {
-        "format": "json",
-        "overwrite": True
-    }
-}
+FEED_FORMAT = "json"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

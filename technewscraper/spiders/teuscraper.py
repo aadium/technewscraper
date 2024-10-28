@@ -1,18 +1,31 @@
+import dateutil.parser
+import pytz
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from technewscraper.items import ArticleItem
 from datetime import datetime, timedelta
-from dateutil import parser
-import pytz
 
-class TechEuScraper(CrawlSpider):
+class TechEUScraper(CrawlSpider):
     name = "teuscraper"
     start_urls = ["https://tech.eu/"]
 
+    today = datetime.now()
+    allow_patterns = []
+
+    # Generate allow patterns for the last three days
+    for i in range(1):
+        previous_date = today - timedelta(days=i)
+        year = previous_date.year
+        month = previous_date.month
+        day = previous_date.day
+        allow_patterns.append(rf'https://tech.eu/{year}/{month:02d}/{day:02d}/')
+
+    # Print the allow patterns for debugging
+    print("Allow patterns:", allow_patterns)
+
     rules = (
-        Rule(LinkExtractor(allow=[r'https://tech.eu/202[3-9]/\d{2}/\d{2}/']), callback="parse_article", follow=True),
+        Rule(LinkExtractor(allow=allow_patterns), callback="parse_article", follow=True),
     )
-    
 
     def parse_article(self, response):
         def convert_date(inpDateTime):
@@ -21,7 +34,7 @@ class TechEuScraper(CrawlSpider):
                 hours_ago = int(time_parts[0])
                 new_datetime = datetime.now() - timedelta(hours=hours_ago)
             else:
-                new_datetime = parser.parse(inpDateTime)
+                new_datetime = dateutil.parser.parse(inpDateTime)
             new_datetime = new_datetime.astimezone(pytz.UTC)
             return new_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
         
@@ -40,4 +53,3 @@ class TechEuScraper(CrawlSpider):
         article_item["summary"] = response.xpath("normalize-space(//div[@class='single-post-content']//p)").get()
 
         return article_item
-    
